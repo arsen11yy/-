@@ -1,31 +1,21 @@
+# numpy для работы с матрицами
 import numpy as np
-import pandas as pd  # нужен для нормальной работы numpy
 
-# Пользователь вводит количество критериев
-number = int(input('Сколько критериев Вы желаете рассмотреть?\n'
-              'Введите количество: '))
-def matrix(n):
-    # Создаем матрицу
-    M = np.ones([n, n])
-    for i in range(0, n):
-        for j in range(0, n):
-            if i < j:
-                mij = input(f'\nНасколько критерий {i}  приоритетнее критерия {j}?\n'
-                            'Введите коэффициент: ')
-                M[i, j] = float(mij)
-                M[j, i] = 1 / float(mij)  # Добавление обратных элементов (под главной диагональю)
+cr_amount = int(input("Введите кол-во критериев: "))
 
-    '''
-    Чтобы вывести весовые коэффициенты, необходимо вычислить собственный вектор матрицы М.
-    Для этого воспользуемся функцией numpy.linalg.eig(М)[1][:,0]
-    '''
-    vector = np.linalg.eig(M)[1][:, 0]
-    # пронормируем вектор
-    norm_vector = vector / vector.sum()
-    return norm_vector
-
-norm_vector = matrix(number)
-# выводим результат
-for x in range(len(norm_vector)):
-    res = norm_vector[x]
-    print(f'Коэффициент критерия {x}: {res:.2f}') # округление до сотых
+# просто итератор
+i = 1
+#создание матрицы 
+matr = np.eye(cr_amount)
+# цикл для заполнения матрицы
+for q in range(i, cr_amount+1):
+  for p in range(i+1, cr_amount+1):
+    matr[q-1][p-1] = round(float(input("Введите сравнение критерия {0}-{1}: ".format(q, p))), 3)
+    matr[p-1][q-1] = round((matr[q-1][p-1])**(-1), 2)
+  i += 1
+# создание списка весовых коэффициентов
+sum_matr = [round(sum(j),2) for j in matr]
+# вывод списка
+for k in sum_matr:
+  print(round(k/sum(sum_matr), 2), end=' ')
+  print(round(k/sum(sum_matr), 2), end=' ')
